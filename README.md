@@ -1,6 +1,3 @@
-# terraform-datadog-kubernetes
-
-Fork of kabisa/terraform-datadog-kubernetes (not maintained)
 
 ![Datadog](https://imgix.datadoghq.com/img/about/presskit/logo-v/dd_vertical_purple.png)
 
@@ -946,3 +943,5 @@ max(last_5m):( ${local.rs_pods_ready} ) / ${local.rs_pods_desired} / ( ${local.r
 | name_suffix              | ""         | No       |                                                                                      |
 | filter_str_concatenation | ,          | No       | If you use an IN expression you need to switch from , to AND                         |
 | priority_offset          | 0          | No       | For non production workloads we can +1 on the priorities                             |
+
+

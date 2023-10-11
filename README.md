@@ -1,3 +1,6 @@
+# Fork kabisa/terraform-datadog-kubernetes repository, which is no longer maintained.
+
+We use it to monitor clusters, and module has deprecations which we need to fix before deprecation turns into error in next provider upgrade.
 
 ![Datadog](https://imgix.datadoghq.com/img/about/presskit/logo-v/dd_vertical_purple.png)
 

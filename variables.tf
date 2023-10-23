@@ -27,10 +27,10 @@ variable "filter_str" {
   type = string
 }
 
-variable "locked" {
-  type        = bool
-  default     = true
-  description = "Makes sure only the creator or admin can modify the monitor."
+variable "restricted_roles" {
+  description = "A list of unique role identifiers to define which roles are allowed to edit the monitor."
+  type        = list(string)
+  default     = []
 }
 
 variable "state_metrics_monitoring" {

@@ -937,7 +937,7 @@ max(last_5m):( ${local.rs_pods_ready} ) / ${local.rs_pods_desired} / ( ${local.r
 | notification_channel     |            | Yes      | The @user or @pagerduty parameters that indicate to Datadog where to send the alerts |
 | additional_tags          | []         | No       |                                                                                      |
 | filter_str               |            | Yes      |                                                                                      |
-| locked                   | True       | No       | Makes sure only the creator or admin can modify the monitor.                         |
+| restricted_roles         | []         | No       | A list of unique role identifiers to define which roles are allowed to edit the monitor. |
 | state_metrics_monitoring | True       | No       |                                                                                      |
 | name_prefix              | ""         | No       |                                                                                      |
 | name_suffix              | ""         | No       |                                                                                      |

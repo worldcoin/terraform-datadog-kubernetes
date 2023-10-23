@@ -6,7 +6,7 @@ locals {
 }
 
 module "replicaset_incomplete" {
-  source  = "github.com/worldcoin/terraform-datadog-generic-monitor"
+  source  = "git@github.com:github.com/worldcoin/terraform-datadog-generic-monitor"
 
   name             = "Replicaset Incomplete"
   query            = "min(${var.replicaset_incomplete_evaluation_period}):max:kubernetes_state.replicaset.replicas_desired{${local.replicaset_incomplete_filter}} by {kube_replica_set,kube_cluster_name} - min:kubernetes_state.replicaset.replicas_ready{${local.replicaset_incomplete_filter}} by {kube_replica_set,kube_cluster_name} > ${var.replicaset_incomplete_critical}"

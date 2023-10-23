@@ -6,7 +6,7 @@ locals {
 }
 
 module "cpu_limits_low" {
-  source  = "git@github.com:github.com/worldcoin/terraform-datadog-generic-monitor"
+  source  = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
 
   name             = "Available CPU for Limits Low"
   query            = "min(${var.cpu_limits_low_evaluation_period}):max:system.cpu.num_cores{${local.cpu_limits_low_filter}} by {kube_cluster_name,host} - sum:kubernetes.cpu.limits{${local.cpu_limits_low_filter}} by {kube_cluster_name,host} < ${var.cpu_limits_low_critical}"

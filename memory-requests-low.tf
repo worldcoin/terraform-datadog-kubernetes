@@ -6,7 +6,7 @@ locals {
 }
 
 module "memory_requests_low" {
-  source  = "git@github.com:github.com/worldcoin/terraform-datadog-generic-monitor"
+  source  = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
 
   name             = "Available Memory for Requests Low"
   query            = "avg(${var.memory_requests_low_evaluation_period}):max:system.mem.total{${local.memory_requests_low_filter}} by {host,kube_cluster_name} - max:kubernetes.memory.requests{${local.memory_requests_low_filter}} by {host,kube_cluster_name} < ${var.memory_requests_low_critical}"

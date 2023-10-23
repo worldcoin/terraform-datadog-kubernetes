@@ -6,7 +6,7 @@ locals {
 }
 
 module "node_memory_used_percent" {
-  source  = "git@github.com:github.com/worldcoin/terraform-datadog-generic-monitor"
+  source  = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
 
   name             = "Memory Used Percent"
   query            = "avg(${var.node_memory_used_percent_evaluation_period}):( 100 * max:kubernetes.memory.usage{${local.node_memory_used_percent_filter}} by {host,kube_cluster_name} ) / max:system.mem.total{${local.node_memory_used_percent_filter}} by {host,kube_cluster_name} > ${var.node_memory_used_percent_critical}"

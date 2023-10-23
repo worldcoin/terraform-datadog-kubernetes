@@ -6,7 +6,7 @@ locals {
 }
 
 module "deployment_multiple_restarts" {
-  source  = "git@github.com:github.com/worldcoin/terraform-datadog-generic-monitor"
+  source  = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
 
   name  = "Deployment Multiple Restarts"
   query = "max(${var.deployment_multiple_restarts_evaluation_period}):clamp_min(max:kubernetes.containers.restarts{${local.deployment_multiple_restarts_filter}} by {kube_deployment} - hour_before(max:kubernetes.containers.restarts{${local.deployment_multiple_restarts_filter}} by {kube_deployment}), 0) > ${var.deployment_multiple_restarts_critical}"

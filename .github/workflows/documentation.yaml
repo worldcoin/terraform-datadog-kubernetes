@@ -1,8 +1,5 @@
 name: Generate terraform docs
 
-env:
-  GITHUB_TOKEN: ${{ secrets.GIT_HUB_TOKEN }}
-
 on:
   push:
     # don't run when we push a tag

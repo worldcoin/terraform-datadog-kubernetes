@@ -6,8 +6,7 @@ locals {
 }
 
 module "node_diskpressure" {
-  source  = "kabisa/generic-monitor/datadog"
-  version = "1.0.0"
+  source  = "github.com/worldcoin/terraform-datadog-generic-monitor"
 
   name             = "Nodes with Diskpressure"
   query            = "avg(${var.node_diskpressure_evaluation_period}):max:kubernetes_state.node.by_condition{${local.node_diskpressure_filter} AND condition:diskpressure AND (status:true OR status:unknown)} by {kube_cluster_name,host} > ${var.node_diskpressure_critical}"

@@ -6,8 +6,7 @@ locals {
 }
 
 module "pod_count_per_node_high" {
-  source  = "kabisa/generic-monitor/datadog"
-  version = "1.0.0"
+  source  = "github.com/worldcoin/terraform-datadog-generic-monitor"
 
   name  = "Pod count per node high"
   query = "min(${var.pod_count_per_node_high_evaluation_period}):sum:kubernetes.pods.running{${local.pod_count_per_node_high_filter}} by {host} > ${var.pod_count_per_node_high_critical}"

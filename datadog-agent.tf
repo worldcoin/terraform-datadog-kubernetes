@@ -6,8 +6,7 @@ locals {
 }
 
 module "datadog_agent" {
-  source  = "kabisa/generic-monitor/datadog"
-  version = "1.0.0"
+  source  = "github.com/worldcoin/terraform-datadog-generic-monitor"
 
   name             = "Datadog agent not running"
   query            = "avg(${var.datadog_agent_evaluation_period}):avg:datadog.agent.running{${local.datadog_agent_filter}} by {host,kube_cluster_name} < 1"

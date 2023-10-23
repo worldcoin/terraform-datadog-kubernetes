@@ -6,8 +6,7 @@ locals {
 }
 
 module "deployment_multiple_restarts" {
-  source  = "kabisa/generic-monitor/datadog"
-  version = "1.0.0"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.0.0"
 
   name  = "Deployment Multiple Restarts"
   query = "max(${var.deployment_multiple_restarts_evaluation_period}):clamp_min(max:kubernetes.containers.restarts{${local.deployment_multiple_restarts_filter}} by {kube_deployment} - hour_before(max:kubernetes.containers.restarts{${local.deployment_multiple_restarts_filter}} by {kube_deployment}), 0) > ${var.deployment_multiple_restarts_critical}"
@@ -32,7 +31,7 @@ module "deployment_multiple_restarts" {
   service              = var.service
   service_display_name = var.service_display_name
   additional_tags      = var.additional_tags
-  locked               = var.locked
+  restricted_roles     = var.restricted_roles
   name_prefix          = var.name_prefix
   name_suffix          = var.name_suffix
 }

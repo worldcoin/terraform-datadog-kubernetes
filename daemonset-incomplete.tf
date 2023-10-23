@@ -6,8 +6,7 @@ locals {
 }
 
 module "daemonset_incomplete" {
-  source  = "kabisa/generic-monitor/datadog"
-  version = "1.0.0"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.0.0"
 
   name             = "Daemonset Incomplete"
   query            = "min(${var.daemonset_incomplete_evaluation_period}):max:kubernetes_state.daemonset.scheduled{${local.daemonset_incomplete_filter}} by {kube_daemon_set,kube_cluster_name} - min:kubernetes_state.daemonset.ready{${local.daemonset_incomplete_filter}} by {kube_daemon_set,kube_cluster_name} > 0"
@@ -29,7 +28,7 @@ module "daemonset_incomplete" {
   service_display_name = var.service_display_name
   notification_channel = var.notification_channel
   additional_tags      = var.additional_tags
-  locked               = var.locked
+  restricted_roles     = var.restricted_roles
   name_prefix          = var.name_prefix
   name_suffix          = var.name_suffix
 }

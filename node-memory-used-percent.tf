@@ -6,8 +6,7 @@ locals {
 }
 
 module "node_memory_used_percent" {
-  source  = "kabisa/generic-monitor/datadog"
-  version = "1.0.0"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.0.0"
 
   name             = "Memory Used Percent"
   query            = "avg(${var.node_memory_used_percent_evaluation_period}):( 100 * max:kubernetes.memory.usage{${local.node_memory_used_percent_filter}} by {host,kube_cluster_name} ) / max:system.mem.total{${local.node_memory_used_percent_filter}} by {host,kube_cluster_name} > ${var.node_memory_used_percent_critical}"
@@ -29,7 +28,7 @@ module "node_memory_used_percent" {
   service_display_name = var.service_display_name
   notification_channel = var.notification_channel
   additional_tags      = var.additional_tags
-  locked               = var.locked
+  restricted_roles     = var.restricted_roles
   name_prefix          = var.name_prefix
   name_suffix          = var.name_suffix
 }

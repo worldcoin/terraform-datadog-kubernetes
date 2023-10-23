@@ -929,19 +929,19 @@ max(last_5m):( ${local.rs_pods_ready} ) / ${local.rs_pods_desired} / ( ${local.r
 
 ## Module Variables
 
-| variable                 | default    | required | description                                                                          |
-|--------------------------|------------|----------|--------------------------------------------------------------------------------------|
-| env                      |            | Yes      |                                                                                      |
-| service                  | Kubernetes | No       |                                                                                      |
-| service_display_name     | None       | No       | Readable version of service name of what you're monitoring.                          |
-| notification_channel     |            | Yes      | The @user or @pagerduty parameters that indicate to Datadog where to send the alerts |
-| additional_tags          | []         | No       |                                                                                      |
-| filter_str               |            | Yes      |                                                                                      |
-| locked                   | True       | No       | Makes sure only the creator or admin can modify the monitor.                         |
-| state_metrics_monitoring | True       | No       |                                                                                      |
-| name_prefix              | ""         | No       |                                                                                      |
-| name_suffix              | ""         | No       |                                                                                      |
-| filter_str_concatenation | ,          | No       | If you use an IN expression you need to switch from , to AND                         |
-| priority_offset          | 0          | No       | For non production workloads we can +1 on the priorities                             |
+| variable                 | default    | required | description                                                                              |
+|--------------------------|------------|----------|------------------------------------------------------------------------------------------|
+| env                      |            | Yes      |                                                                                          |
+| service                  | Kubernetes | No       |                                                                                          |
+| service_display_name     | None       | No       | Readable version of service name of what you're monitoring.                              |
+| notification_channel     |            | Yes      | The @user or @pagerduty parameters that indicate to Datadog where to send the alerts     |
+| additional_tags          | []         | No       |                                                                                          |
+| filter_str               |            | Yes      |                                                                                          |
+| restricted_roles         | []         | No       | A list of unique role identifiers to define which roles are allowed to edit the monitor. |
+| state_metrics_monitoring | True       | No       |                                                                                          |
+| name_prefix              | ""         | No       |                                                                                          |
+| name_suffix              | ""         | No       |                                                                                          |
+| filter_str_concatenation | ,          | No       | If you use an IN expression you need to switch from , to AND                             |
+| priority_offset          | 0          | No       | For non production workloads we can +1 on the priorities                                 |
 
 

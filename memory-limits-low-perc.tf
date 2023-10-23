@@ -6,7 +6,7 @@ locals {
 }
 
 module "memory_limits_low_perc" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.0.0"
 
   name             = "Available Memory for Limits in percentage Low"
   query            = "max(${var.memory_limits_low_perc_evaluation_period}):( max:kubernetes.memory.limits{${local.memory_limits_low_perc_filter}}  by {host,kube_cluster_name}/ max:system.mem.total{${local.memory_limits_low_perc_filter}} by {host,kube_cluster_name}) * 100 > ${var.memory_limits_low_perc_critical}"

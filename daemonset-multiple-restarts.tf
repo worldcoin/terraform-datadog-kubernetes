@@ -6,7 +6,7 @@ locals {
 }
 
 module "daemonset_multiple_restarts" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.0.0"
 
   name  = "Daemonset Multiple Restarts"
   query = "max(${var.daemonset_multiple_restarts_evaluation_period}):clamp_min(max:kubernetes.containers.restarts{${local.daemonset_multiple_restarts_filter}} by {kube_daemon_set} - hour_before(max:kubernetes.containers.restarts{${local.daemonset_multiple_restarts_filter}} by {kube_daemon_set}), 0) > ${var.daemonset_multiple_restarts_critical}"

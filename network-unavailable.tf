@@ -6,7 +6,7 @@ locals {
 }
 
 module "network_unavailable" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.0.0"
 
   name             = "Nodes with Network Unavailable"
   query            = "avg(${var.network_unavailable_evaluation_period}):max:kubernetes_state.node.by_condition{${local.network_unavailable_filter} AND condition:networkunavailable AND (status:true OR status:unknown)} by {kube_cluster_name,host} > ${var.network_unavailable_critical}"

@@ -6,7 +6,7 @@ locals {
 }
 
 module "pod_ready" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.0.0"
 
   name             = "Pod status not ready"
   query            = "min(${var.pod_ready_evaluation_period}):sum:kubernetes_state.pod.count{${local.pod_ready_filter}} by {kube_cluster_name,kube_namespace} - sum:kubernetes_state.pod.ready{${local.pod_ready_filter}} by {kube_cluster_name,kube_namespace} > 0"

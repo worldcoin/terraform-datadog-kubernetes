@@ -6,7 +6,7 @@ locals {
 }
 
 module "node_ready" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.0.0"
 
   name             = "Node Not Ready"
   query            = "avg(${var.node_ready_evaluation_period}):count_nonzero(sum:kubernetes_state.node.by_condition{${local.node_ready_filter} AND (NOT condition:ready) AND (status:true OR status:unknown)} by {kube_cluster_name,host}) > ${var.node_ready_critical}"

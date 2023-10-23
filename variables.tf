@@ -57,9 +57,3 @@ variable "priority_offset" {
   description = "For non production workloads we can +1 on the priorities"
   default     = 0
 }
-
-variable "restricted_roles" {
-  description = "A list of unique role identifiers to define which roles are allowed to edit the monitor."
-  type        = list(string)
-  default     = []
-}

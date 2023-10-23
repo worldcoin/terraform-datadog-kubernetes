@@ -8,7 +8,7 @@ locals {
 }
 
 module "replicaset_unavailable" {
-  source  = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
 
   name = "Replicaset Unavailable"
   # This (ab)uses a division by zero to make sure we don't get alerts when nr of desired pods < 2

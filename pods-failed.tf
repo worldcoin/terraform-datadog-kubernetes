@@ -6,7 +6,7 @@ locals {
 }
 
 module "pods_failed" {
-  source  = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor"
 
   name  = "Pods Failed"
   query = "min(${var.pods_failed_evaluation_period}):default_zero(max:kubernetes_state.pod.status_phase{phase:failed${var.filter_str_concatenation}${local.pods_failed_filter}} by {kube_namespace}) > ${var.pods_failed_critical}"

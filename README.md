@@ -18,7 +18,7 @@ This module is part of a larger suite of modules that provide alerts in Datadog.
 Other modules can be found on the [Terraform Registry](https://registry.terraform.io/search/modules?namespace=kabisa&provider=datadog)
 
 We have two base modules we use to standardise development of our Monitor Modules:
-- [generic monitor](https://github.com/kabisa/terraform-datadog-generic-monitor?ref=v1.0.0) Used in 90% of our alerts
+- [generic monitor](https://github.com/kabisa/terraform-datadog-generic-monitor) Used in 90% of our alerts
 - [service check monitor](https://github.com/kabisa/terraform-datadog-service-check-monitor)
 
 Modules are generated with this tool: https://github.com/kabisa/datadog-terraform-generator
@@ -929,19 +929,19 @@ max(last_5m):( ${local.rs_pods_ready} ) / ${local.rs_pods_desired} / ( ${local.r
 
 ## Module Variables
 
-| variable                 | default    | required | description                                                                          |
-|--------------------------|------------|----------|--------------------------------------------------------------------------------------|
-| env                      |            | Yes      |                                                                                      |
-| service                  | Kubernetes | No       |                                                                                      |
-| service_display_name     | None       | No       | Readable version of service name of what you're monitoring.                          |
-| notification_channel     |            | Yes      | The @user or @pagerduty parameters that indicate to Datadog where to send the alerts |
-| additional_tags          | []         | No       |                                                                                      |
-| filter_str               |            | Yes      |                                                                                      |
+| variable                 | default    | required | description                                                                              |
+|--------------------------|------------|----------|------------------------------------------------------------------------------------------|
+| env                      |            | Yes      |                                                                                          |
+| service                  | Kubernetes | No       |                                                                                          |
+| service_display_name     | None       | No       | Readable version of service name of what you're monitoring.                              |
+| notification_channel     |            | Yes      | The @user or @pagerduty parameters that indicate to Datadog where to send the alerts     |
+| additional_tags          | []         | No       |                                                                                          |
+| filter_str               |            | Yes      |                                                                                          |
 | restricted_roles         | []         | No       | A list of unique role identifiers to define which roles are allowed to edit the monitor. |
-| state_metrics_monitoring | True       | No       |                                                                                      |
-| name_prefix              | ""         | No       |                                                                                      |
-| name_suffix              | ""         | No       |                                                                                      |
-| filter_str_concatenation | ,          | No       | If you use an IN expression you need to switch from , to AND                         |
-| priority_offset          | 0          | No       | For non production workloads we can +1 on the priorities                             |
+| state_metrics_monitoring | True       | No       |                                                                                          |
+| name_prefix              | ""         | No       |                                                                                          |
+| name_suffix              | ""         | No       |                                                                                          |
+| filter_str_concatenation | ,          | No       | If you use an IN expression you need to switch from , to AND                             |
+| priority_offset          | 0          | No       | For non production workloads we can +1 on the priorities                                 |
 
 

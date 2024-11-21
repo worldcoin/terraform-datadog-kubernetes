@@ -6,7 +6,7 @@ locals {
 }
 
 module "node_status" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.0.0"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.1.0"
 
   name                = "Node Status not OK"
   query               = "avg(${var.node_status_evaluation_period}):avg:kubernetes_state.node.status{${local.node_status_filter}} by {kube_cluster_name,node} < 1"

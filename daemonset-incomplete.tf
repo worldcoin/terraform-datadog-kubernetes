@@ -6,7 +6,7 @@ locals {
 }
 
 module "daemonset_incomplete" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.0.0"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.1.0"
 
   name             = "Daemonset Incomplete"
   query            = "min(${var.daemonset_incomplete_evaluation_period}):max:kubernetes_state.daemonset.scheduled{${local.daemonset_incomplete_filter}} by {kube_daemon_set,kube_cluster_name} - min:kubernetes_state.daemonset.ready{${local.daemonset_incomplete_filter}} by {kube_daemon_set,kube_cluster_name} > 0"

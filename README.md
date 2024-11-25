@@ -78,6 +78,8 @@ Monitors:
 | [Pods Pending](#pods-pending) | True | 3  | `min(last_10m):default_zero(max:kubernetes_state.pod.status_phase{phase:pending${var.filter_str_concatenation}tag:xxx} by {kube_namespace}) > ` |
 | [Replicaset Incomplete](#replicaset-incomplete) | True | 3  | `min(last_15m):max:kubernetes_state.replicaset.replicas_desired{tag:xxx} by {kube_replica_set,kube_cluster_name} - min:kubernetes_state.replicaset.replicas_ready{tag:xxx} by {kube_replica_set,kube_cluster_name} > ` |
 | [Replicaset Unavailable](#replicaset-unavailable) | True | 2  | `max(last_5m):( ${local.rs_pods_ready} ) / ${local.rs_pods_desired} / ( ${local.rs_pods_desired} - 1 ) <= 0` |
+| [Sts Desired Vs Status](#sts-desired-vs-status) | True | 3  | `avg(last_15m):max:kubernetes_state.statefulset.replicas_desired{tag:xxx} by {kube_cluster_name} - max:kubernetes_state.statefulset.replicas_available{tag:xxx} by {kube_cluster_name} > 10` |
+| [Sts Multiple Restarts](#sts-multiple-restarts) | True | 3  | `max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_stateful_set} - hour_before(max:kubernetes.containers.restarts{tag:xxx} by {kube_stateful_set}), 0) > 5.0` |
 
 # Getting started developing
 [pre-commit](http://pre-commit.com/) was used to do Terraform linting and validating.
@@ -925,6 +927,59 @@ max(last_5m):( ${local.rs_pods_ready} ) / ${local.rs_pods_desired} / ( ${local.r
 | replicaset_unavailable_notify_no_data    | False                                    | No       |                                               |
 | replicaset_unavailable_ok_threshold      | None                                     | No       |                                               |
 | replicaset_unavailable_priority          | 2                                        | No       | Number from 1 (high) to 5 (low).              |
+
+
+## Sts Desired Vs Status
+
+The amount of expected pods to run minus the actual number
+
+Query:
+```terraform
+avg(last_15m):max:kubernetes_state.statefulset.replicas_desired{tag:xxx} by {kube_cluster_name} - max:kubernetes_state.statefulset.replicas_available{tag:xxx} by {kube_cluster_name} > 10
+```
+
+| variable                                | default                                  | required | description                      |
+|-----------------------------------------|------------------------------------------|----------|----------------------------------|
+| sts_desired_vs_status_enabled           | True                                     | No       |                                  |
+| sts_desired_vs_status_warning           | 1                                        | No       |                                  |
+| sts_desired_vs_status_critical          | 10                                       | No       |                                  |
+| sts_desired_vs_status_evaluation_period | last_15m                                 | No       |                                  |
+| sts_desired_vs_status_note              | ""                                       | No       |                                  |
+| sts_desired_vs_status_docs              | The amount of expected pods to run minus the actual number | No       |                                  |
+| sts_desired_vs_status_filter_override   | ""                                       | No       |                                  |
+| sts_desired_vs_status_alerting_enabled  | True                                     | No       |                                  |
+| sts_desired_vs_status_no_data_timeframe | None                                     | No       |                                  |
+| sts_desired_vs_status_notify_no_data    | False                                    | No       |                                  |
+| sts_desired_vs_status_ok_threshold      | None                                     | No       |                                  |
+| sts_desired_vs_status_priority          | 3                                        | No       | Number from 1 (high) to 5 (low). |
+
+
+## Sts Multiple Restarts
+
+If a container restarts once, it can be considered 'normal behaviour' for K8s. A Statefulset restarting multiple times though is a problem
+
+Query:
+```terraform
+max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_stateful_set} - hour_before(max:kubernetes.containers.restarts{tag:xxx} by {kube_stateful_set}), 0) > 5.0
+```
+
+| variable                                            | default                                  | required | description                      |
+|-----------------------------------------------------|------------------------------------------|----------|----------------------------------|
+| sts_multiple_restarts_enabled                       | True                                     | No       |                                  |
+| sts_multiple_restarts_warning                       | None                                     | No       |                                  |
+| sts_multiple_restarts_critical                      | 5.0                                      | No       |                                  |
+| sts_multiple_restarts_evaluation_period             | last_15m                                 | No       |                                  |
+| sts_multiple_restarts_note                          | ""                                       | No       |                                  |
+| sts_multiple_restarts_docs                          | If a container restarts once, it can be considered 'normal behaviour' for K8s. A Statefulset restarting multiple times though is a problem | No       |                                  |
+| sts_multiple_restarts_filter_override               | ""                                       | No       |                                  |
+| sts_multiple_restarts_alerting_enabled              | True                                     | No       |                                  |
+| sts_multiple_restarts_no_data_timeframe             | None                                     | No       |                                  |
+| sts_multiple_restarts_notify_no_data                | False                                    | No       |                                  |
+| sts_multiple_restarts_ok_threshold                  | None                                     | No       |                                  |
+| sts_multiple_restarts_name_prefix                   | ""                                       | No       |                                  |
+| sts_multiple_restarts_name_suffix                   | ""                                       | No       |                                  |
+| sts_multiple_restarts_priority                      | 3                                        | No       | Number from 1 (high) to 5 (low). |
+| sts_multiple_restarts_notification_channel_override | ""                                       | No       |                                  |
 
 
 ## Module Variables

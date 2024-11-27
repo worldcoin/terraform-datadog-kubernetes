@@ -9,7 +9,7 @@ module "sts_desired_vs_status" {
   source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.1.0"
 
   name             = "Desired pods vs current pods (Statefulsets)"
-  query            = "avg(${var.sts_desired_vs_status_evaluation_period}):max:kubernetes_state.statefulset.replicas_desired{${local.sts_desired_vs_status_filter}} by {kube_cluster_name} - max:kubernetes_state.statefulset.replicas_available{${local.sts_desired_vs_status_filter}} by {kube_cluster_name} > ${var.sts_desired_vs_status_critical}"
+  query            = "avg(${var.sts_desired_vs_status_evaluation_period}):max:kubernetes_state.statefulset.replicas_desired{${local.sts_desired_vs_status_filter}} by {kube_cluster_name} - max:kubernetes_state.statefulset.replicas_ready{${local.sts_desired_vs_status_filter}} by {kube_cluster_name} > ${var.sts_desired_vs_status_critical}"
   alert_message    = "Kubernetes is having trouble getting all the pods to start. (Based on replicas number in all the statefulset)"
   recovery_message = "All pods described in statefulset have started"
   notify_no_data   = true

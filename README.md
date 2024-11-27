@@ -78,7 +78,7 @@ Monitors:
 | [Pods Pending](#pods-pending) | True | 3  | `min(last_10m):default_zero(max:kubernetes_state.pod.status_phase{phase:pending${var.filter_str_concatenation}tag:xxx} by {kube_namespace}) > ` |
 | [Replicaset Incomplete](#replicaset-incomplete) | True | 3  | `min(last_15m):max:kubernetes_state.replicaset.replicas_desired{tag:xxx} by {kube_replica_set,kube_cluster_name} - min:kubernetes_state.replicaset.replicas_ready{tag:xxx} by {kube_replica_set,kube_cluster_name} > ` |
 | [Replicaset Unavailable](#replicaset-unavailable) | True | 2  | `max(last_5m):( ${local.rs_pods_ready} ) / ${local.rs_pods_desired} / ( ${local.rs_pods_desired} - 1 ) <= 0` |
-| [Sts Desired Vs Status](#sts-desired-vs-status) | True | 3  | `avg(last_15m):max:kubernetes_state.statefulset.replicas_desired{tag:xxx} by {kube_cluster_name} - max:kubernetes_state.statefulset.replicas_available{tag:xxx} by {kube_cluster_name} > 10` |
+| [Sts Desired Vs Status](#sts-desired-vs-status) | True | 3  | `avg(last_15m):max:kubernetes_state.statefulset.replicas_desired{tag:xxx} by {kube_cluster_name} - max:kubernetes_state.statefulset.replicas_ready{tag:xxx} by {kube_cluster_name} > 10` |
 | [Sts Multiple Restarts](#sts-multiple-restarts) | True | 3  | `max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_stateful_set} - hour_before(max:kubernetes.containers.restarts{tag:xxx} by {kube_stateful_set}), 0) > 5.0` |
 
 # Getting started developing
@@ -935,7 +935,7 @@ The amount of expected pods to run minus the actual number
 
 Query:
 ```terraform
-avg(last_15m):max:kubernetes_state.statefulset.replicas_desired{tag:xxx} by {kube_cluster_name} - max:kubernetes_state.statefulset.replicas_available{tag:xxx} by {kube_cluster_name} > 10
+avg(last_15m):max:kubernetes_state.statefulset.replicas_desired{tag:xxx} by {kube_cluster_name} - max:kubernetes_state.statefulset.replicas_ready{tag:xxx} by {kube_cluster_name} > 10
 ```
 
 | variable                                | default                                  | required | description                      |

@@ -4,26 +4,30 @@ on:
   push:
     # don't run when we push a tag
     tags-ignore:
-    - '*'
+      - "*"
     # don't run when we merge to main
     # the action should have run already
     branches-ignore:
-    - 'main'
+      - "main"
 jobs:
   pre-commit:
     runs-on: ubuntu-latest
     steps:
-    - uses: terraform-linters/setup-tflint@v2
-      name: Setup TFLint
-      with:
-        tflint_version: v0.38.1
-    - uses: actions/checkout@v3
-    - uses: actions/setup-python@v4
-    - uses: pre-commit/action@v3.0.0
-      # pre-commit fails if it changed files
-      # we want to go on
-      continue-on-error: true
-    - uses: pre-commit/action@v3.0.0
-    - uses: EndBug/add-and-commit@v9
-      with:
-        default_author: github_actions
+      - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
+        with:
+          terraform_version: "1.8.5"
+
+      - uses: terraform-linters/setup-tflint@v2
+        name: Setup TFLint
+        with:
+          tflint_version: v0.38.1
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+      - uses: pre-commit/action@v3.0.0
+        # pre-commit fails if it changed files
+        # we want to go on
+        continue-on-error: true
+      - uses: pre-commit/action@v3.0.0
+      - uses: EndBug/add-and-commit@v9
+        with:
+          default_author: github_actions

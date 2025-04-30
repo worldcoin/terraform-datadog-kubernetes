@@ -67,7 +67,7 @@ Monitors:
 | [Node Diskpressure](#node-diskpressure) | True | 3  | `avg(last_5m):max:kubernetes_state.node.by_condition{tag:xxx AND condition:diskpressure AND (status:true OR status:unknown)} by {kube_cluster_name,host} > ` |
 | [Node Memory Used Percent](#node-memory-used-percent) | True | 2  | `avg(last_5m):( 100 * max:kubernetes.memory.usage{tag:xxx} by {host,kube_cluster_name} ) / max:system.mem.total{tag:xxx} by {host,kube_cluster_name} > 90` |
 | [Node Memorypressure](#node-memorypressure) | True | 3  | `avg(last_5m):max:kubernetes_state.node.by_condition{tag:xxx AND condition:memorypressure AND (status:true OR status:unknown)} by {kube_cluster_name,host} > ` |
-| [Node Ready](#node-ready) | True | 2  | `avg(last_5m):count_nonzero(sum:kubernetes_state.node.by_condition{tag:xxx AND (NOT condition:ready) AND (status:true OR status:unknown)} by {kube_cluster_name,host}) > 1` |
+| [Node Ready](#node-ready) | True | 2  | `avg(last_5m):count_nonzero(sum:kubernetes_state.node.by_condition{tag:xxx AND (NOT condition:*ready) AND (status:true OR status:unknown)} by {kube_cluster_name,host}) > 1` |
 | [Node Status](#node-status) | True | 2  | `avg(last_5m):avg:kubernetes_state.node.status{tag:xxx} by {kube_cluster_name,node} < 1` |
 | [Persistent Volumes](#persistent-volumes) | True | 3  | `avg(last_5m):max:kubernetes_state.persistentvolume.by_phase{tag:xxx AND phase:failed} > 1` |
 | [Pid Pressure](#pid-pressure) | True | 3  | `avg(last_5m):max:kubernetes_state.node.by_condition{tag:xxx AND condition:pidpressure AND (status:true OR status:unknown)} by {kube_cluster_name,host} > ` |
@@ -666,7 +666,7 @@ Checks to see if the node is in ready status or not
 
 Query:
 ```terraform
-avg(last_5m):count_nonzero(sum:kubernetes_state.node.by_condition{tag:xxx AND (NOT condition:ready) AND (status:true OR status:unknown)} by {kube_cluster_name,host}) > 1
+avg(last_5m):count_nonzero(sum:kubernetes_state.node.by_condition{tag:xxx AND (NOT condition:*ready) AND (status:true OR status:unknown)} by {kube_cluster_name,host}) > 1
 ```
 
 | variable                     | default                                  | required | description                      |

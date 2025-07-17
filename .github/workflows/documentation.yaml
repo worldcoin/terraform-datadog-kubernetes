@@ -11,7 +11,7 @@ on:
       - "main"
 jobs:
   pre-commit:
-    runs-on: ubuntu-latest
+    runs-on: arc-medium-arm64-runner
     steps:
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:

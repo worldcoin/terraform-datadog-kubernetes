@@ -16,7 +16,7 @@ jobs:
       - uses: hashicorp/setup-terraform@b9cd54a3c349d3f38e8881555d616ced269862dd # v3.1.2
         with:
           terraform_version: "1.8.5"
-      - uses: terraform-linters/setup-tflint@d4316e06e67be17ddca9c400dccf7ef910eef15b
+      - uses: terraform-linters/setup-tflint@444635365d380c7363d1eaee4267317c2445717d
         name: Setup TFLint
         with:
           tflint_version: v0.38.1

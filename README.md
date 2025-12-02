@@ -53,7 +53,7 @@ Monitors:
 | [CPU Requests Low](#cpu-requests-low) | False | 3  | `max(last_5m):max:system.cpu.num_cores{tag:xxx} by {kube_cluster_name,host} - sum:kubernetes.cpu.requests{tag:xxx} by {kube_cluster_name,host} < 0.5` |
 | [Daemonset Incomplete](#daemonset-incomplete) | True | 2  | `min(last_15m):max:kubernetes_state.daemonset.scheduled{tag:xxx} by {kube_daemon_set,kube_cluster_name} - min:kubernetes_state.daemonset.ready{tag:xxx} by {kube_daemon_set,kube_cluster_name} > 0` |
 | [Daemonset Multiple Restarts](#daemonset-multiple-restarts) | True | 3  | `max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_daemon_set} - hour_before(max:kubernetes.containers.restarts{tag:xxx} by {kube_daemon_set}), 0) > 5.0` |
-| [Datadog Agent](#datadog-agent) | True | 2  | `avg(last_5m):avg:datadog.agent.running{tag:xxx} by {host,kube_cluster_name} < 1` |
+| [Datadog Agent](#datadog-agent) | True | 2  | `max(last_10m):avg:datadog.agent.running{tag:xxx} by {host,kube_cluster_name} < 1` |
 | [Deploy Desired Vs Status](#deploy-desired-vs-status) | True | 3  | `avg(last_15m):max:kubernetes_state.deployment.replicas_desired{tag:xxx} by {kube_cluster_name} - max:kubernetes_state.deployment.replicas_available{tag:xxx} by {kube_cluster_name} > 10` |
 | [Deployment Multiple Restarts](#deployment-multiple-restarts) | True | 3  | `max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_deployment} - hour_before(max:kubernetes.containers.restarts{tag:xxx} by {kube_deployment}), 0) > 5.0` |
 | [Hpa Status](#hpa-status) | True | 3  | `avg(last_15m):avg:kubernetes_state.hpa.condition{tag:xxx} by {hpa,kube_namespace,status,condition} < 1` |
@@ -322,13 +322,13 @@ max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_dae
 
 Query:
 ```terraform
-avg(last_5m):avg:datadog.agent.running{tag:xxx} by {host,kube_cluster_name} < 1
+max(last_10m):avg:datadog.agent.running{tag:xxx} by {host,kube_cluster_name} < 1
 ```
 
 | variable                        | default  | required | description                      |
 |---------------------------------|----------|----------|----------------------------------|
 | datadog_agent_enabled           | True     | No       |                                  |
-| datadog_agent_evaluation_period | last_5m  | No       |                                  |
+| datadog_agent_evaluation_period | last_10m | No       |                                  |
 | datadog_agent_note              | ""       | No       |                                  |
 | datadog_agent_docs              | ""       | No       |                                  |
 | datadog_agent_filter_override   | ""       | No       |                                  |

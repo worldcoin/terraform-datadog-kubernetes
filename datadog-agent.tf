@@ -9,7 +9,7 @@ module "datadog_agent" {
   source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.1.0"
 
   name             = "Datadog agent not running"
-  query            = "avg(${var.datadog_agent_evaluation_period}):avg:datadog.agent.running{${local.datadog_agent_filter}} by {host,kube_cluster_name} < 1"
+  query            = "max(${var.datadog_agent_evaluation_period}):avg:datadog.agent.running{${local.datadog_agent_filter}} by {host,kube_cluster_name} < 1"
   alert_message    = "Datadog Agent not running on {{host.name}} in Cluster: {{kube_cluster_name.name}}"
   recovery_message = "Agent running again"
   notify_no_data   = true

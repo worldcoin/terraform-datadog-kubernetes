@@ -6,7 +6,7 @@ locals {
 }
 
 module "sts_multiple_restarts" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.1.0"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.2.0"
 
   name  = "Statefulset Multiple Restarts"
   query = "max(${var.sts_multiple_restarts_evaluation_period}):clamp_min(max:kubernetes.containers.restarts{${local.sts_multiple_restarts_filter}} by {kube_stateful_set} - hour_before(max:kubernetes.containers.restarts{${local.sts_multiple_restarts_filter}} by {kube_stateful_set}), 0) > ${var.sts_multiple_restarts_critical}"

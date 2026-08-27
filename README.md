@@ -53,7 +53,7 @@ Monitors:
 | [CPU Requests Low](#cpu-requests-low) | False | 3  | `max(last_5m):max:system.cpu.num_cores{tag:xxx} by {kube_cluster_name,host} - sum:kubernetes.cpu.requests{tag:xxx} by {kube_cluster_name,host} < 0.5` |
 | [Daemonset Incomplete](#daemonset-incomplete) | True | 2  | `min(last_15m):max:kubernetes_state.daemonset.scheduled{tag:xxx} by {kube_daemon_set,kube_cluster_name} - min:kubernetes_state.daemonset.ready{tag:xxx} by {kube_daemon_set,kube_cluster_name} > 0` |
 | [Daemonset Multiple Restarts](#daemonset-multiple-restarts) | True | 3  | `max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_daemon_set} - hour_before(max:kubernetes.containers.restarts{tag:xxx} by {kube_daemon_set}), 0) > 5.0` |
-| [Datadog Agent](#datadog-agent) | True | 2  | `min(last_10m):max:kubernetes_state.daemonset.desired{tag:xxx AND kube_daemon_set:datadog} by {kube_cluster_name} - min:kubernetes_state.daemonset.ready{tag:xxx AND kube_daemon_set:datadog} by {kube_cluster_name} > 0` |
+| [Datadog Agent](#datadog-agent) | True | 2  | `min(last_10m):max:kubernetes_state.daemonset.desired{${local.datadog_agent_daemonset_filter}} by {kube_cluster_name} - min:kubernetes_state.daemonset.ready{${local.datadog_agent_daemonset_filter}} by {kube_cluster_name} > 0` |
 | [Deploy Desired Vs Status](#deploy-desired-vs-status) | True | 3  | `avg(last_15m):max:kubernetes_state.deployment.replicas_desired{tag:xxx} by {kube_cluster_name} - max:kubernetes_state.deployment.replicas_available{tag:xxx} by {kube_cluster_name} > 10` |
 | [Deployment Multiple Restarts](#deployment-multiple-restarts) | True | 3  | `max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_deployment} - hour_before(max:kubernetes.containers.restarts{tag:xxx} by {kube_deployment}), 0) > 5.0` |
 | [Hpa Status](#hpa-status) | True | 3  | `avg(last_15m):avg:kubernetes_state.hpa.condition{tag:xxx} by {hpa,kube_namespace,status,condition} < 1` |
@@ -322,7 +322,7 @@ max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_dae
 
 Query:
 ```terraform
-min(last_10m):max:kubernetes_state.daemonset.desired{tag:xxx AND kube_daemon_set:datadog} by {kube_cluster_name} - min:kubernetes_state.daemonset.ready{tag:xxx AND kube_daemon_set:datadog} by {kube_cluster_name} > 0
+min(last_10m):max:kubernetes_state.daemonset.desired{${local.datadog_agent_daemonset_filter}} by {kube_cluster_name} - min:kubernetes_state.daemonset.ready{${local.datadog_agent_daemonset_filter}} by {kube_cluster_name} > 0
 ```
 
 | variable                        | default  | required | description                      |

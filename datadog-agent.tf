@@ -4,10 +4,9 @@ locals {
     var.filter_str
   )
 
-  # Scope to the Datadog Agent's own DaemonSet (Helm release name "datadog", see
-  # cluster-apps/common/cluster-apps-bootstrap/templates/application-datadog.yaml)
+  # Scope to the Datadog Agent's own DaemonSet (Helm release name is "datadog")
   # so this checks agent health, not just node presence.
-  datadog_agent_daemonset_filter = "${local.datadog_agent_filter} AND kube_daemon_set:datadog"
+  datadog_agent_daemonset_filter = "${local.datadog_agent_filter}${var.filter_str_concatenation}kube_daemon_set:datadog"
 }
 
 module "datadog_agent" {
@@ -22,7 +21,7 @@ module "datadog_agent" {
   no_data_message   = "No data for Datadog Agent DaemonSet health in Cluster: {{kube_cluster_name.name}}"
 
   # monitor level vars
-  enabled            = var.datadog_agent_enabled
+  enabled            = var.state_metrics_monitoring && var.datadog_agent_enabled
   alerting_enabled   = var.datadog_agent_alerting_enabled
   critical_threshold = 0
   # no warning threshold for this monitor

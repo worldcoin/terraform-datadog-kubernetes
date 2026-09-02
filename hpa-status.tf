@@ -5,7 +5,7 @@ locals {
 }
 
 module "hpa_status" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.2.0"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.3.0"
 
   name             = "HPA Status not OK"
   query            = "avg(${var.hpa_status_evaluation_period}):avg:kubernetes_state.hpa.condition{${local.hpa_status_filter}} by {hpa,kube_namespace,status,condition} < 1"
@@ -28,7 +28,6 @@ module "hpa_status" {
   service_display_name = var.service_display_name
   notification_channel = var.notification_channel
   additional_tags      = var.additional_tags
-  restricted_roles     = var.restricted_roles
   name_prefix          = var.name_prefix
   name_suffix          = var.name_suffix
 }

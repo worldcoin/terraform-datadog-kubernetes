@@ -10,7 +10,7 @@ locals {
 }
 
 module "datadog_agent" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.2.0"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.3.0"
 
   name              = "Datadog agent not running"
   query             = "min(${var.datadog_agent_evaluation_period}):max:kubernetes_state.daemonset.desired{${local.datadog_agent_daemonset_filter}} by {kube_cluster_name} - min:kubernetes_state.daemonset.ready{${local.datadog_agent_daemonset_filter}} by {kube_cluster_name} > 0"
@@ -35,7 +35,6 @@ module "datadog_agent" {
   service_display_name = var.service_display_name
   notification_channel = var.notification_channel
   additional_tags      = var.additional_tags
-  restricted_roles     = var.restricted_roles
   name_prefix          = var.name_prefix
   name_suffix          = var.name_suffix
 }

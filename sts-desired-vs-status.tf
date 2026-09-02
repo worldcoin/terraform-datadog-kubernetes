@@ -6,7 +6,7 @@ locals {
 }
 
 module "sts_desired_vs_status" {
-  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.2.0"
+  source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.3.0"
 
   name             = "Desired pods vs current pods (Statefulsets)"
   query            = "avg(${var.sts_desired_vs_status_evaluation_period}):max:kubernetes_state.statefulset.replicas_desired{${local.sts_desired_vs_status_filter}} by {kube_cluster_name} - max:kubernetes_state.statefulset.replicas_ready{${local.sts_desired_vs_status_filter}} by {kube_cluster_name} > ${var.sts_desired_vs_status_critical}"
@@ -30,7 +30,6 @@ module "sts_desired_vs_status" {
   service_display_name = var.service_display_name
   notification_channel = var.notification_channel
   additional_tags      = var.additional_tags
-  restricted_roles     = var.restricted_roles
   name_prefix          = var.name_prefix
   name_suffix          = var.name_suffix
 }

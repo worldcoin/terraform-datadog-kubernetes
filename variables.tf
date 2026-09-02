@@ -27,12 +27,6 @@ variable "filter_str" {
   type = string
 }
 
-variable "restricted_roles" {
-  description = "A list of unique role identifiers to define which roles are allowed to edit the monitor."
-  type        = list(string)
-  default     = []
-}
-
 variable "state_metrics_monitoring" {
   type    = bool
   default = true

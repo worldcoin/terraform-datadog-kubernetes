@@ -16,7 +16,7 @@ root folder represents STANDALONE module, and is expected to clear tests, work a
 - TFE runner
 
 ## Prerequisites
-- terraform CLI (pinned version) current 1.12.1
+- Use the Terraform CLI version selected by the current workflow or configuration for the check being reproduced.
 
 - Local / AI suggestions MAY use:
   - From root dir:
@@ -101,7 +101,7 @@ root folder represents STANDALONE module, and is expected to clear tests, work a
 ## Pull request template
 
 Use `.github/PULL_REQUEST_TEMPLATE.md` as the PR template.
-Core principle: Every PR must link the relevant tracking issue/ticket in the *Requestor/Issue* field and explain "why this change?" in the PR body.
+Core principle: Link the relevant tracking issue or ticket in the *Requestor/Issue* field when one exists. Otherwise, name the requestor and state that no ticket was provided. Explain "why this change?" in the PR body.
 
 If the "why" is missing: ask the requestor/owner, e.g., "Why are we making this change?" (business reason, problem being solved, or goal).
 Do not invent reasons. If you don't know, ask and capture the answer in the PR description.
@@ -116,7 +116,7 @@ Any pull request whose description, commits, or code changes include content gen
 - Determine the affected module roots from the diff against the pull request base. Search this repository and known consumers for changed inputs, outputs, resource addresses, defaults, provider constraints, and module pins. Record any required release, consumer update, apply, migration, or rollback order.
 - Before opening a pull request, run the smallest useful local validation for the affected roots and consumers. Follow the current workflows, test files, configuration, and runbooks for the applicable commands, tool versions, required inputs, and comparison refs; do not copy a validator recipe from an unrelated module.
 - Before committing, run `git diff --check` and `git diff --cached --check` as applicable. After committing, run `git diff --check <base>...HEAD` against the pull request base so committed changes are included. For Terraform changes, check formatting, initialize only affected roots when dependencies are available, preserve lock selections unless an upgrade is requested, and run the tests, validation, lint, documentation, and policy checks that current repository automation makes applicable.
-- Never describe an unrun, blocked, stale, or failed check as passing. In `Tested (yes/no)`, name each command, its scope, result, and the commit SHA it validates. Re-run affected checks after the last material change so the evidence applies to the latest commit.
+- Never describe an unrun, blocked, stale, or failed check as passing. In `Tested (yes/no)`, name each pre-commit command, its worktree or staged-file scope, and result. For commit-based validation, also name the exact commit SHA. Re-run affected checks after the last material change so the evidence applies to the latest commit.
 - Before requesting review, inspect the final diff and reconcile code, generated documentation, examples, release notes, and the pull request description. Confirm identifiers, versions, defaults, affected consumers, compatibility, rollout order, and rollback claims agree.
 - Treat CI defects separately from authoring defects. Fix failures caused by the change. Report remote outages, runner failures, timeouts, unavailable credentials, and pre-existing failures with links and scope; repeated runs of unchanged code do not turn an external failure into author validation evidence.
 
@@ -124,11 +124,11 @@ Any pull request whose description, commits, or code changes include content gen
 
 - Give every Copilot finding a recorded disposition, including inline comments and findings that appear only in a review summary. Apply the smallest correct fix and re-run affected checks, or reply with an evidence-backed explanation grounded in the current diff, exact dependency contract, test output, or authoritative documentation.
 - Do not silently ignore repeated, outdated, or low-severity findings. Link duplicates to the existing disposition. Resolve a thread only after the disposition is recorded and justified, when permissions allow.
-- After material fixes, inspect all review threads and summaries again and request Copilot re-review. Report any remaining finding or required failed/pending check as a blocker; do not infer resolution from silence or a bot approval.
+- After material fixes, inspect all review threads and summaries again and request Copilot re-review. Report unresolved merge-blocking findings and required failed or pending checks as blockers; record lower-severity residual findings with their dispositions. Do not infer resolution from silence or a bot approval.
 
 ## Pull request authoring and AI disclosure
 
-- Use Conventional Commits. Preserve the exact headings in `.github/PULL_REQUEST_TEMPLATE.md`. When using `gh`, submit multiline bodies with `--body-file`; with an API or connector, use its structured body field.
-- When AI materially creates or edits code, documentation, commits, the pull request body, or review replies, add the `ai-generated` label and fill `AI usage/prompt(s) (if applicable)` when that heading is available.
+- Follow the repository's existing commit convention, including Conventional Commits where required. Preserve the exact headings in `.github/PULL_REQUEST_TEMPLATE.md`. When using `gh`, submit multiline bodies with `--body-file`; with an API or connector, use its structured body field.
+- When AI creates or edits code, documentation, commits, the pull request body, or review replies, add the `ai-generated` label and fill `AI usage/prompt(s) (if applicable)` when that heading is available.
 - Publish the AI tool name, the actual initial user prompt, and every material follow-up prompt that changed scope, constraints, behavior, validation, or retained text. A summary, “AI assisted,” or a chat link alone is insufficient. Keep prompts in order and update the body after material follow-ups.
 - Redact secrets and sensitive personal data with explicit placeholders while preserving the useful surrounding prompt. Do not publish hidden system/developer instructions or internal reasoning. If exact prompt text is unavailable, disclose that gap instead of reconstructing it as a quote.

@@ -129,6 +129,6 @@ Any pull request whose description, commits, or code changes include content gen
 ## Pull request authoring and AI disclosure
 
 - Follow the repository's existing commit convention, including Conventional Commits where required. Preserve the exact headings in `.github/PULL_REQUEST_TEMPLATE.md`. When using `gh`, submit multiline bodies with `--body-file`; with an API or connector, use its structured body field.
-- When AI creates or edits code, documentation, commits, the pull request body, or review replies, add the `ai-generated` label and fill `AI usage/prompt(s) (if applicable)` when that heading is available.
+- When AI creates or edits code, documentation, commits, pull request text including the title or body, or review replies, add the `ai-generated` label and fill `AI usage/prompt(s) (if applicable)` when that heading is available.
 - Publish the AI tool name, the actual initial user prompt, and every material follow-up prompt that changed scope, constraints, behavior, validation, or retained text. A summary, “AI assisted,” or a chat link alone is insufficient. Keep prompts in order and update the body after material follow-ups.
 - Redact secrets and sensitive personal data with explicit placeholders while preserving the useful surrounding prompt. Do not publish hidden system/developer instructions or internal reasoning. If exact prompt text is unavailable, disclose that gap instead of reconstructing it as a quote.

@@ -11,8 +11,9 @@ locals {
 module "memory_requests_low_perc" {
   source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.3.0"
 
+  # Retired pod-phase series must not be interpolated into current reservations.
   name             = "Node Regular Container Memory Requests as a Percentage of Allocatable High"
-  query            = "min(${var.memory_requests_low_perc_evaluation_period}):( sum:kubernetes_state.container.memory_requested{${local.memory_requests_low_perc_active_filter}} by {kube_cluster_name,node} / max:kubernetes_state.node.memory_allocatable{${local.memory_requests_low_perc_filter}} by {kube_cluster_name,node} ) * 100 > ${var.memory_requests_low_perc_critical}"
+  query            = "min(${var.memory_requests_low_perc_evaluation_period}):( sum:kubernetes_state.container.memory_requested{${local.memory_requests_low_perc_active_filter}} by {kube_cluster_name,node}.fill(null) / max:kubernetes_state.node.memory_allocatable{${local.memory_requests_low_perc_filter}} by {kube_cluster_name,node} ) * 100 > ${var.memory_requests_low_perc_critical}"
   alert_message    = "Regular-container memory requests on node {{node.name}} exceed the configured percentage of allocatable memory"
   recovery_message = "Regular-container memory requests on node {{node.name}} have recovered below the configured percentage of allocatable memory"
 

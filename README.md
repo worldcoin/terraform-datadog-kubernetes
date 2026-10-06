@@ -998,3 +998,4 @@ max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_sta
 | filter_str_concatenation | ,          | No       | If you use an IN expression you need to switch from , to AND                         |
 | priority_offset          | 0          | No       | For non production workloads we can +1 on the priorities                             |
 
+

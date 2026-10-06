@@ -3,15 +3,18 @@ locals {
     var.memory_requests_low_perc_filter_override,
     var.filter_str
   )
+
+  # Completed jobs retain request metrics but no longer reserve node memory.
+  memory_requests_low_perc_active_filter = var.filter_str_concatenation == "," ? "${local.memory_requests_low_perc_filter},!pod_phase:succeeded,!pod_phase:failed,node:*" : "(${local.memory_requests_low_perc_filter}) AND NOT pod_phase:succeeded AND NOT pod_phase:failed AND node:*"
 }
 
 module "memory_requests_low_perc" {
   source = "git@github.com:worldcoin/terraform-datadog-generic-monitor?ref=v1.3.0"
 
-  name             = "Available Memory for Requests in percentage Low"
-  query            = "max(${var.cpu_requests_low_perc_evaluation_period}):( max:kubernetes.memory.requests{${local.cpu_requests_low_perc_filter}} / max:system.mem.total{${local.cpu_requests_low_perc_filter}} ) * 100 > ${var.cpu_requests_low_perc_critical}"
-  alert_message    = "Kubernetes cluster memory room for Requests in percentage is too low"
-  recovery_message = "Kubernetes cluster memory Requests in percentage has recovered"
+  name             = "Node Regular Container Memory Requests as a Percentage of Allocatable High"
+  query            = "min(${var.memory_requests_low_perc_evaluation_period}):( sum:kubernetes_state.container.memory_requested{${local.memory_requests_low_perc_active_filter}} by {kube_cluster_name,node} / max:kubernetes_state.node.memory_allocatable{${local.memory_requests_low_perc_filter}} by {kube_cluster_name,node} ) * 100 > ${var.memory_requests_low_perc_critical}"
+  alert_message    = "Regular-container memory requests on node {{node.name}} exceed the configured percentage of allocatable memory"
+  recovery_message = "Regular-container memory requests on node {{node.name}} have recovered below the configured percentage of allocatable memory"
 
   # monitor level vars
   enabled            = var.memory_requests_low_perc_enabled

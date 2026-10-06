@@ -61,7 +61,7 @@ Monitors:
 | [Memory Limits Low Perc](#memory-limits-low-perc) | True | 3  | `max(last_5m):( max:kubernetes.memory.limits{tag:xxx}  by {host,kube_cluster_name}/ max:system.mem.total{tag:xxx} by {host,kube_cluster_name}) * 100 > 100` |
 | [Memory Limits Low](#memory-limits-low) | False | 3  | `avg(last_5m):max:system.mem.total{tag:xxx} by {host,kube_cluster_name} - max:kubernetes.memory.limits{tag:xxx} by {host,kube_cluster_name} < 3000000000` |
 | [Memory Requests Low Perc State](#memory-requests-low-perc-state) | False | 3  | `max(last_5m):( max:kubernetes_state.container.memory_requested{tag:xxx} / max:kubernetes_state.node.memory_allocatable{tag:xxx} ) * 100 > 95` |
-| [Memory Requests Low Perc](#memory-requests-low-perc) | True | 3  | `max(${var.cpu_requests_low_perc_evaluation_period}):( max:kubernetes.memory.requests{${local.cpu_requests_low_perc_filter}} / max:system.mem.total{${local.cpu_requests_low_perc_filter}} ) * 100 > ${var.cpu_requests_low_perc_critical}` |
+| [Memory Requests Low Perc](#memory-requests-low-perc) | True | 3  | `min(last_5m):( sum:kubernetes_state.container.memory_requested{${local.memory_requests_low_perc_active_filter}} by {kube_cluster_name,node} / max:kubernetes_state.node.memory_allocatable{tag:xxx} by {kube_cluster_name,node} ) * 100 > 95` |
 | [Memory Requests Low](#memory-requests-low) | False | 3  | `avg(last_5m):max:system.mem.total{tag:xxx} by {host,kube_cluster_name} - max:kubernetes.memory.requests{tag:xxx} by {host,kube_cluster_name} < 3000000000` |
 | [Network Unavailable](#network-unavailable) | True | 3  | `avg(last_5m):max:kubernetes_state.node.by_condition{tag:xxx AND condition:networkunavailable AND (status:true OR status:unknown)} by {kube_cluster_name,host} > ` |
 | [Node Diskpressure](#node-diskpressure) | True | 3  | `avg(last_5m):max:kubernetes_state.node.by_condition{tag:xxx AND condition:diskpressure AND (status:true OR status:unknown)} by {kube_cluster_name,host} > ` |
@@ -517,11 +517,11 @@ max(last_5m):( max:kubernetes_state.container.memory_requested{tag:xxx} / max:ku
 
 ## Memory Requests Low Perc
 
-If the node where a Pod is running has enough of a resource available, it's possible (and allowed) for a container to use more of a resource than its request for that resource specifies. However, a container is not allowed to use more than its resource limit. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+Sums regular-container memory requests from nonterminal pods assigned to each node and compares them with that node's allocatable memory. Requires Kubernetes State Core metrics. Excludes effective init-container requests and pod overhead, so this is a lower bound on scheduler reservations. Exact scheduling headroom requires effective pod-request metrics. Unscheduled pending pods are covered by the Pods Pending monitor. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 
 Query:
 ```terraform
-max(${var.cpu_requests_low_perc_evaluation_period}):( max:kubernetes.memory.requests{${local.cpu_requests_low_perc_filter}} / max:system.mem.total{${local.cpu_requests_low_perc_filter}} ) * 100 > ${var.cpu_requests_low_perc_critical}
+min(last_5m):( sum:kubernetes_state.container.memory_requested{${local.memory_requests_low_perc_active_filter}} by {kube_cluster_name,node} / max:kubernetes_state.node.memory_allocatable{tag:xxx} by {kube_cluster_name,node} ) * 100 > 95
 ```
 
 | variable                                   | default                                  | required | description                      |
@@ -531,7 +531,7 @@ max(${var.cpu_requests_low_perc_evaluation_period}):( max:kubernetes.memory.requ
 | memory_requests_low_perc_critical          | 95                                       | No       |                                  |
 | memory_requests_low_perc_evaluation_period | last_5m                                  | No       |                                  |
 | memory_requests_low_perc_note              | ""                                       | No       |                                  |
-| memory_requests_low_perc_docs              | If the node where a Pod is running has enough of a resource available, it's possible (and allowed) for a container to use more of a resource than its request for that resource specifies. However, a container is not allowed to use more than its resource limit. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ | No       |                                  |
+| memory_requests_low_perc_docs              | Sums regular-container memory requests from nonterminal pods assigned to each node and compares them with that node's allocatable memory. Requires Kubernetes State Core metrics. Excludes effective init-container requests and pod overhead, so this is a lower bound on scheduler reservations. Exact scheduling headroom requires effective pod-request metrics. Unscheduled pending pods are covered by the Pods Pending monitor. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ | No       |                                  |
 | memory_requests_low_perc_filter_override   | ""                                       | No       |                                  |
 | memory_requests_low_perc_alerting_enabled  | True                                     | No       |                                  |
 | memory_requests_low_perc_no_data_timeframe | None                                     | No       |                                  |

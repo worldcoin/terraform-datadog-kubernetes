@@ -25,7 +25,7 @@ variable "memory_requests_low_perc_note" {
 
 variable "memory_requests_low_perc_docs" {
   type    = string
-  default = "If the node where a Pod is running has enough of a resource available, it's possible (and allowed) for a container to use more of a resource than its request for that resource specifies. However, a container is not allowed to use more than its resource limit. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+  default = "Sums regular-container memory requests from nonterminal pods assigned to each node and compares them with that node's allocatable memory. Requires Kubernetes State Core metrics. Excludes effective init-container requests and pod overhead, so this is a lower bound on scheduler reservations. Exact scheduling headroom requires effective pod-request metrics. Unscheduled pending pods are covered by the Pods Pending monitor. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 }
 
 variable "memory_requests_low_perc_filter_override" {

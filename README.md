@@ -61,7 +61,7 @@ Monitors:
 | [Memory Limits Low Perc](#memory-limits-low-perc) | True | 3  | `max(last_5m):( max:kubernetes.memory.limits{tag:xxx}  by {host,kube_cluster_name}/ max:system.mem.total{tag:xxx} by {host,kube_cluster_name}) * 100 > 100` |
 | [Memory Limits Low](#memory-limits-low) | False | 3  | `avg(last_5m):max:system.mem.total{tag:xxx} by {host,kube_cluster_name} - max:kubernetes.memory.limits{tag:xxx} by {host,kube_cluster_name} < 3000000000` |
 | [Memory Requests Low Perc State](#memory-requests-low-perc-state) | False | 3  | `max(last_5m):( max:kubernetes_state.container.memory_requested{tag:xxx} / max:kubernetes_state.node.memory_allocatable{tag:xxx} ) * 100 > 95` |
-| [Memory Requests Low Perc](#memory-requests-low-perc) | True | 3  | `min(last_5m):( sum:kubernetes_state.container.memory_requested{${local.memory_requests_low_perc_active_filter}} by {node} / max:kubernetes_state.node.memory_allocatable{tag:xxx} by {node} ) * 100 > 95` |
+| [Memory Requests Low Perc](#memory-requests-low-perc) | True | 3  | `min(last_5m):( sum:kubernetes_state.container.memory_requested{${local.memory_requests_low_perc_active_filter}} by {kube_cluster_name,node} / max:kubernetes_state.node.memory_allocatable{tag:xxx} by {kube_cluster_name,node} ) * 100 > 95` |
 | [Memory Requests Low](#memory-requests-low) | False | 3  | `avg(last_5m):max:system.mem.total{tag:xxx} by {host,kube_cluster_name} - max:kubernetes.memory.requests{tag:xxx} by {host,kube_cluster_name} < 3000000000` |
 | [Network Unavailable](#network-unavailable) | True | 3  | `avg(last_5m):max:kubernetes_state.node.by_condition{tag:xxx AND condition:networkunavailable AND (status:true OR status:unknown)} by {kube_cluster_name,host} > ` |
 | [Node Diskpressure](#node-diskpressure) | True | 3  | `avg(last_5m):max:kubernetes_state.node.by_condition{tag:xxx AND condition:diskpressure AND (status:true OR status:unknown)} by {kube_cluster_name,host} > ` |
@@ -521,7 +521,7 @@ Sums regular-container memory requests from nonterminal pods assigned to each no
 
 Query:
 ```terraform
-min(last_5m):( sum:kubernetes_state.container.memory_requested{${local.memory_requests_low_perc_active_filter}} by {node} / max:kubernetes_state.node.memory_allocatable{tag:xxx} by {node} ) * 100 > 95
+min(last_5m):( sum:kubernetes_state.container.memory_requested{${local.memory_requests_low_perc_active_filter}} by {kube_cluster_name,node} / max:kubernetes_state.node.memory_allocatable{tag:xxx} by {kube_cluster_name,node} ) * 100 > 95
 ```
 
 | variable                                   | default                                  | required | description                      |
@@ -997,5 +997,4 @@ max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_sta
 | name_suffix              | ""         | No       |                                                                                      |
 | filter_str_concatenation | ,          | No       | If you use an IN expression you need to switch from , to AND                         |
 | priority_offset          | 0          | No       | For non production workloads we can +1 on the priorities                             |
-
 

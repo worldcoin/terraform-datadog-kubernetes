@@ -25,7 +25,7 @@ variable "memory_requests_low_perc_note" {
 
 variable "memory_requests_low_perc_docs" {
   type    = string
-  default = "Sums memory requests from active pods assigned to each node and compares them with that node's allocatable memory. Requires Kubernetes State Core metrics. Unscheduled pending pods are covered by the Pods Pending monitor. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
+  default = "Sums regular-container memory requests from nonterminal pods assigned to each node and compares them with that node's allocatable memory. Requires Kubernetes State Core metrics. Excludes effective init-container requests and pod overhead, so this is a lower bound on scheduler reservations. Exact scheduling headroom requires effective pod-request metrics. Unscheduled pending pods are covered by the Pods Pending monitor. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/"
 }
 
 variable "memory_requests_low_perc_filter_override" {

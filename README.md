@@ -517,7 +517,7 @@ max(last_5m):( max:kubernetes_state.container.memory_requested{tag:xxx} / max:ku
 
 ## Memory Requests Low Perc
 
-Sums memory requests from active pods assigned to each node and compares them with that node's allocatable memory. Requires Kubernetes State Core metrics. Unscheduled pending pods are covered by the Pods Pending monitor. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+Sums regular-container memory requests from nonterminal pods assigned to each node and compares them with that node's allocatable memory. Requires Kubernetes State Core metrics. Excludes effective init-container requests and pod overhead, so this is a lower bound on scheduler reservations. Exact scheduling headroom requires effective pod-request metrics. Unscheduled pending pods are covered by the Pods Pending monitor. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
 
 Query:
 ```terraform
@@ -531,7 +531,7 @@ min(last_5m):( sum:kubernetes_state.container.memory_requested{${local.memory_re
 | memory_requests_low_perc_critical          | 95                                       | No       |                                  |
 | memory_requests_low_perc_evaluation_period | last_5m                                  | No       |                                  |
 | memory_requests_low_perc_note              | ""                                       | No       |                                  |
-| memory_requests_low_perc_docs              | Sums memory requests from active pods assigned to each node and compares them with that node's allocatable memory. Requires Kubernetes State Core metrics. Unscheduled pending pods are covered by the Pods Pending monitor. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ | No       |                                  |
+| memory_requests_low_perc_docs              | Sums regular-container memory requests from nonterminal pods assigned to each node and compares them with that node's allocatable memory. Requires Kubernetes State Core metrics. Excludes effective init-container requests and pod overhead, so this is a lower bound on scheduler reservations. Exact scheduling headroom requires effective pod-request metrics. Unscheduled pending pods are covered by the Pods Pending monitor. https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/ | No       |                                  |
 | memory_requests_low_perc_filter_override   | ""                                       | No       |                                  |
 | memory_requests_low_perc_alerting_enabled  | True                                     | No       |                                  |
 | memory_requests_low_perc_no_data_timeframe | None                                     | No       |                                  |
@@ -997,5 +997,4 @@ max(last_15m):clamp_min(max:kubernetes.containers.restarts{tag:xxx} by {kube_sta
 | name_suffix              | ""         | No       |                                                                                      |
 | filter_str_concatenation | ,          | No       | If you use an IN expression you need to switch from , to AND                         |
 | priority_offset          | 0          | No       | For non production workloads we can +1 on the priorities                             |
-
 
